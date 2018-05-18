@@ -1,1 +1,0 @@
-{"alpha":0.1,"beta":0.001,"numTopics":5,"numTopWords":50,"numIterations":1000,"numRetries":10,"corpusFile":"/librairy/corpus/corpus.csv.gz","outputDir":"/librairy/model","language":"en","regEx":"(.*);;(.*);;(.*);;(.*)","textIndex":4,"labelIndex":3,"idIndex":1,"pos":"NOUN VERB","stopwords":[]}

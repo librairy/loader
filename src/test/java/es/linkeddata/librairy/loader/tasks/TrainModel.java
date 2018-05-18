@@ -3,11 +3,11 @@ package es.linkeddata.librairy.loader.tasks;
 import com.google.common.base.Strings;
 import es.linkeddata.librairy.loader.Config;
 import es.linkeddata.librairy.loader.client.LearnerClient;
-import es.linkeddata.librairy.loader.client.LibrairyClient;
 import es.linkeddata.librairy.loader.reader.Reader;
 import es.linkeddata.librairy.loader.reader.ReaderFactory;
 import es.linkeddata.librairy.loader.service.ParallelService;
 import org.apache.commons.lang.StringUtils;
+import org.junit.Assert;
 import org.junit.Test;
 import org.librairy.service.learner.facade.rest.model.Document;
 import org.slf4j.Logger;
@@ -30,6 +30,7 @@ public class TrainModel {
 
     @Test
     public void execute(){
+
         String propertiesPath = Strings.isNullOrEmpty(System.getenv("LOADER_PROPERTIES"))? "application.properties" : System.getenv("LOADER_PROPERTIES");
 
         Config config = new Config(propertiesPath);
@@ -37,16 +38,14 @@ public class TrainModel {
         File corpusFile = Paths.get(config.get("corpus.file")).toFile();
 
         if (!corpusFile.exists()){
-            LOG.warn("File does not exist! " + corpusFile.getAbsolutePath());
-            return;
+            Assert.fail("File does not exist! " + corpusFile.getAbsolutePath());
         }
 
         ParallelService parallelService = new ParallelService();
         LearnerClient librairyClient = new LearnerClient(config.get("librairy.endpoint"),config.get("librairy.user"),config.get("librairy.pwd"));
 
         if (!librairyClient.reset()){
-            LOG.error("Communication error to librAIry");
-            return;
+            Assert.fail("Communication error to librAIry");
         }
 
 

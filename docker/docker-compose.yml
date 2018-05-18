@@ -12,5 +12,4 @@ services:
       - EMAIL_PWD=librairyoeg2016
       - REST_PATH=/topics
     volumes:
-    - .:/librairy
     - /var/run/docker.sock:/var/run/docker.sock
