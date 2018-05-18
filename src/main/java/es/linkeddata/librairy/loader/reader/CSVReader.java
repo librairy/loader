@@ -8,6 +8,7 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -55,6 +56,23 @@ public class CSVReader implements Reader{
         }catch (Exception e){
             LOG.error("Unexpected error parsing file: " + path,e);
             return Optional.empty();
+        }
+    }
+
+    @Override
+    public void offset(Integer numLines) {
+        if (numLines>0){
+            AtomicInteger counter = new AtomicInteger();
+            String line;
+            try{
+                while (((line = reader.readLine()) != null) && (counter.incrementAndGet() <= numLines)){
+                }
+
+            }catch (Exception e){
+                LOG.error("Unexpected error parsing file: " + path,e);
+            }
+
+
         }
     }
 

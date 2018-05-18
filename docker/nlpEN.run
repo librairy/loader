@@ -1,0 +1,4 @@
+docker stop learner-topics
+docker rm learner-topics
+docker pull librairy/learner-topics-service:latest
+docker run -d --restart=always --name nlp-en-service -p 7778:7777 -p 65111:65111 librairy/nlp-en-service:latest

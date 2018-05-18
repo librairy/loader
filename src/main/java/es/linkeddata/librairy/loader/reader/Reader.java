@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface Reader {
 
     Optional<Document> next();
+
+    void offset(Integer numLines);
 }

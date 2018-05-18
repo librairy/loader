@@ -1,0 +1,4 @@
+docker stop learner-topics
+docker rm learner-topics
+docker pull librairy/learner-topics-service:latest
+docker run -d --restart=always --name learner-topics -e REST_PATH=/topics -p 7777:7777 e LIBRAIRY_API_USERS=oeg:oeg2018 -e JAVA_OPTS=-Xmx4096m -v `pwd`/corpus:/librairy -e NLP_ENDPOINT=http://librairy.linkeddata.es/nlp-%% -v /var/run/docker.sock:/var/run/docker.sock librairy/learner-topics-service:latest

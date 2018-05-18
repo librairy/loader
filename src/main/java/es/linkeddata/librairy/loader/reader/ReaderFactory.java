@@ -19,29 +19,20 @@ public class ReaderFactory {
     private static final Logger LOG = LoggerFactory.getLogger(ReaderFactory.class);
 
 
-    public static Reader newFrom(Properties properties){
+    public static Reader newFrom(File file, String formatExp, Map<String,String> parsingMap){
 
-        File file           = Paths.get(properties.getProperty("file.path")).toFile();
-        String formatExp    = properties.getProperty("file.format");
         String format       = StringUtils.substringBefore(formatExp,"_");
 
         try {
             if (format.equalsIgnoreCase("jsonl")){
-                Map<String,String> map = new HashMap<>();
-                map.put("id", properties.getProperty("document.id"));
-                map.put("name", properties.getProperty(("document.name")));
-                map.put("text", properties.getProperty(("document.text")));
-                if (properties.containsKey("labels"))   map.put("labels", properties.getProperty("document.labels"));
-                return new JsonlReader(file,map);
+                return new JsonlReader(file,parsingMap);
             }else if (format.equalsIgnoreCase("csv")){
                 String separator = StringUtils.substringAfter(formatExp,"_");
                 Map<String,Integer> map = new HashMap<>();
-                map.put("id",   Integer.valueOf(properties.getProperty(("document.id"))));
-                map.put("name", Integer.valueOf(properties.getProperty(("document.name"))));
-                map.put("text", Integer.valueOf(properties.getProperty(("document.text"))));
+                parsingMap.entrySet().forEach(entry -> map.put(entry.getKey(), Integer.valueOf(entry.getValue())));
                 String labelsSeparator = null;
-                if (properties.containsKey("labels")) {
-                    String labelsExp        = properties.getProperty("document.labels");
+                if (parsingMap.containsKey("labels")) {
+                    String labelsExp        = String.valueOf(parsingMap.get("labels"));
                     Integer labelsIndex     = Integer.valueOf(StringUtils.substringBefore(labelsExp,"_"));
                     labelsSeparator  = StringUtils.substringAfter(labelsExp,"_");
                     map.put("labels", labelsIndex);

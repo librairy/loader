@@ -16,9 +16,9 @@ public class Config {
 
     private static final Logger LOG = LoggerFactory.getLogger(Config.class);
 
-    private static Properties prop = new Properties();
+    private Properties prop = new Properties();
 
-    static{
+    public Config(String path) {
         InputStream input = null;
 
         try {
@@ -41,15 +41,15 @@ public class Config {
         }
     }
 
-    public static String get(String id){
+    public String get(String id){
         return prop.getProperty(id);
     }
 
-    public static boolean exists(String id){
+    public boolean exists(String id){
         return prop.containsKey(id);
     }
 
-    public static Properties getProperties() {
+    public Properties getProperties() {
         return prop;
     }
 }

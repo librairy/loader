@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -58,7 +59,23 @@ public class  JsonlReader implements Reader{
             LOG.error("Unexpected error parsing file: " + path,e);
             return Optional.empty();
         }
+    }
 
+    @Override
+    public void offset(Integer numLines) {
+        if (numLines>0){
+            AtomicInteger counter = new AtomicInteger();
+            String line;
+            try{
+                while (((line = reader.readLine()) != null) && (counter.incrementAndGet() <= numLines)){
+                }
+
+            }catch (Exception e){
+                LOG.error("Unexpected error parsing file: " + path,e);
+            }
+
+
+        }
     }
 
 }
