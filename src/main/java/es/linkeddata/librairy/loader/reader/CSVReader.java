@@ -33,6 +33,14 @@ public class CSVReader implements Reader{
         this.map = map;
     }
 
+    public CSVReader(InputStreamReader input,String separator, String labelSeparator, Map<String,Integer> map) throws IOException {
+        this.path   ="inputStream";
+        this.reader = new BufferedReader(input);
+        this.map    = map;
+        this.separator = separator;
+        this.labelSeparator = labelSeparator;
+    }
+
     @Override
     public Optional<Document> next() {
         String line;

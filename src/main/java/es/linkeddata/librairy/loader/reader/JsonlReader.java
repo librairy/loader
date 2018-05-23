@@ -1,5 +1,7 @@
 package es.linkeddata.librairy.loader.reader;
 
+import com.google.common.base.Strings;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.librairy.service.learner.facade.rest.model.Document;
 import org.slf4j.Logger;
@@ -28,6 +30,13 @@ public class  JsonlReader implements Reader{
         this.map = map;
     }
 
+    public JsonlReader(InputStreamReader input,Map<String,String> map) throws IOException {
+        this.path   ="inputStream";
+        this.reader = new BufferedReader(input);
+        this.map    = map;
+    }
+
+
     @Override
     public Optional<Document> next()  {
         String line;
@@ -41,17 +50,27 @@ public class  JsonlReader implements Reader{
             JSONObject jsonObject = new JSONObject(line);
 
             if (map.containsKey("id"))      document.setId(jsonObject.getString(map.get("id")));
-            if (map.containsKey("name"))    document.setName(jsonObject.getString(map.get("name")));
-            if (map.containsKey("text"))    document.setText(jsonObject.getString(map.get("text")));
+            if (map.containsKey("name") && jsonObject.has(map.get("name")))    document.setName(jsonObject.getString(map.get("name")));
+            if (map.containsKey("text") && jsonObject.has(map.get("text")))    document.setText(jsonObject.getString(map.get("text")));
             if (map.containsKey("labels")){
+
                 List<String> labels = new ArrayList<>();
-                Iterator<Object> it = jsonObject.getJSONArray(map.get("labels")).iterator();
-                while(it.hasNext()){
-                    String label = (String) it.next();
-                    labels.add(label);
+                Object labelObject = jsonObject.get(map.get("labels"));
+
+                if (labelObject instanceof JSONArray){
+                    Iterator<Object> it = jsonObject.getJSONArray(map.get("labels")).iterator();
+                    while(it.hasNext()){
+                        String label = (String) it.next();
+                        labels.add(label);
+                    }
+                }else{
+                    labels.add(jsonObject.getString(map.get("labels")));
                 }
+
                 document.setLabels(labels);
             }
+
+            if (Strings.isNullOrEmpty(document.getText())) return Optional.empty();
 
             return Optional.of(document);
 
