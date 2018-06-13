@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.GZIPInputStream;
@@ -27,7 +28,9 @@ public class  JsonlReader implements Reader{
 
     public JsonlReader(File jsonFile,Map<String,String> map) throws IOException {
         this.path = jsonFile.getAbsolutePath();
-        this.reader = path.endsWith(".gz")? new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(jsonFile)))) : new BufferedReader(new InputStreamReader(new FileInputStream(jsonFile))) ;
+        this.reader = path.endsWith(".gz")?
+                new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(jsonFile)))) :
+                new BufferedReader(new InputStreamReader(new FileInputStream(jsonFile))) ;
         this.map = map;
     }
 
