@@ -14,5 +14,6 @@ services:
       - LIBRAIRY_API_USERS=oeg:oeg2018
       - JAVA_OPTS=-Xmx8192m
       - REST_PATH=/topics
+      - ENABLE_MULTIGRAMS=true
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
