@@ -28,9 +28,9 @@ public class LearnerClient extends LibrairyClient {
         this.pwd = pwd;
     }
 
-    public boolean save(Document document){
+    public boolean save(Document document, Boolean multigrams){
         try {
-            HttpResponse<String> response = Unirest.post(endpoint + "/documents").basicAuth(user, pwd).body(document).asString();
+            HttpResponse<String> response = Unirest.post(endpoint + "/documents").queryString("multigrams",multigrams).basicAuth(user, pwd).body(document).asString();
 
             if (response.getStatus() != 200 && response.getStatus() != 201){
                 return false;

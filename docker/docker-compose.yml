@@ -2,10 +2,10 @@ version: '2'
 services:
   dbpedia-spotlight:
     image: librairy/dbpedia-en:latest
-    restart: always
+    environment:
+     - JAVA_OPTS=-Xmx16g
   nlp-en-service:
     image: librairy/nlp-en-service:latest
-    restart: always
   learner-topics:
     image: librairy/learner-topics-service:latest
     ports:
@@ -14,6 +14,5 @@ services:
       - LIBRAIRY_API_USERS=oeg:oeg2018
       - JAVA_OPTS=-Xmx8192m
       - REST_PATH=/topics
-      - ENABLE_MULTIGRAMS=true
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock

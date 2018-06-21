@@ -73,11 +73,12 @@ public class TrainModel {
         Integer interval    = config.exists("corpus.interval")? Integer.valueOf(config.get("corpus.interval")): 100;
         Integer maxSize     = config.exists("corpus.size")? Integer.valueOf(config.get("corpus.size")) : -1;
         Integer offset      = config.exists("corpus.offset")? Integer.valueOf(config.get("corpus.offset")) : 0;
+        Boolean multigrams  = config.exists("corpus.multigrams")? Boolean.valueOf(config.get("corpus.multigrams")) : false;
         reader.offset(offset);
         while(( maxSize<0 || counter.get()<=maxSize) &&  (doc = reader.next()).isPresent()){
             if (counter.incrementAndGet() % interval == 0) LOG.info(counter.get() + " documents indexed");
             final Document document = doc.get();
-            parallelService.execute(() -> librairyClient.save(document));
+            parallelService.execute(() -> librairyClient.save(document, multigrams));
         }
         parallelService.stop();
         LOG.info(counter.get() + " documents indexed");
