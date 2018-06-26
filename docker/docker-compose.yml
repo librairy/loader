@@ -15,4 +15,5 @@ services:
       - JAVA_OPTS=-Xmx8192m
       - REST_PATH=/topics
     volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
+     - ./:/librairy
+     - /var/run/docker.sock:/var/run/docker.sock
