@@ -1,55 +1,16 @@
 package es.linkeddata.librairy.loader;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import java.util.List;
 
 /**
  * @author Badenes Olmedo, Carlos <cbadenes@fi.upm.es>
  */
 
-public class Config {
+public interface Config {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Config.class);
+    String get(String id);
 
-    private Properties prop = new Properties();
+    boolean exists(String id);
 
-    public Config(String path) {
-        InputStream input = null;
-
-        try {
-
-            input = new FileInputStream("application.properties");
-
-            // load a properties file
-            prop.load(input);
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    public String get(String id){
-        return prop.getProperty(id);
-    }
-
-    public boolean exists(String id){
-        return prop.containsKey(id);
-    }
-
-    public Properties getProperties() {
-        return prop;
-    }
+    List<String> list();
 }

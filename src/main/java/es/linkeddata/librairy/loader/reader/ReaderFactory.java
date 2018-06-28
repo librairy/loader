@@ -4,11 +4,13 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
+import java.io.*;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.zip.GZIPInputStream;
 
 /**
  * @author Badenes Olmedo, Carlos <cbadenes@fi.upm.es>
@@ -19,13 +21,29 @@ public class ReaderFactory {
     private static final Logger LOG = LoggerFactory.getLogger(ReaderFactory.class);
 
 
-    public static Reader newFrom(File file, String formatExp, Map<String,String> parsingMap){
+    public static Reader newFrom(String url, String formatExp, Map<String,String> parsingMap) throws IOException {
+
+        InputStreamReader inputReader;
+
+        if (url.startsWith("http")){
+            if (url.endsWith("gz")) {
+                inputReader = new InputStreamReader(new GZIPInputStream(new URL(url).openStream()));
+            }else{
+                inputReader = new InputStreamReader(new URL(url).openStream());
+            }
+        }else{
+            if (url.endsWith("gz")) {
+                inputReader = new InputStreamReader(new GZIPInputStream(new FileInputStream(url)));
+            }else{
+                inputReader = new InputStreamReader(new FileInputStream(url));
+            }
+        }
 
         String format       = StringUtils.substringBefore(formatExp,"_");
 
         try {
             if (format.equalsIgnoreCase("jsonl")){
-                return new JsonlReader(file,parsingMap);
+                return new JsonlReader(inputReader,parsingMap);
             }else if (format.equalsIgnoreCase("csv")){
                 String separator = StringUtils.substringAfter(formatExp,"_");
                 Map<String,Integer> map = new HashMap<>();
@@ -37,7 +55,7 @@ public class ReaderFactory {
                     labelsSeparator  = StringUtils.substringAfter(labelsExp,"_");
                     map.put("labels", labelsIndex);
                 }
-                return new CSVReader(file,separator, labelsSeparator, map);
+                return new CSVReader(inputReader,separator, labelsSeparator, map);
             }else{
                 throw new RuntimeException("File format not supported: " + format);
             }
