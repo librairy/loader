@@ -14,6 +14,7 @@ jboss/server/minimal/tmp/**/*
 jboss/server/minimal/data/**/*
 jboss/server/minimal/work/**/*
 
+docker/corpus/
 target/
 *.class
 .idea
