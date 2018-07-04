@@ -7,15 +7,13 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-
 /**
  * @author Badenes Olmedo, Carlos <cbadenes@fi.upm.es>
  */
 
-public class ReTrainModel {
+public class ReTrainAndExportModel {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ReTrainModel.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ReTrainAndExportModel.class);
 
     @Test
     public void execute(){
@@ -25,10 +23,13 @@ public class ReTrainModel {
         ModelService modelService = new ModelService();
 
         try {
-            modelService.retrain(new PropertiesConfig(propertiesPath), false);
+            PropertiesConfig config = new PropertiesConfig(propertiesPath);
+            modelService.retrain(config, true);
+            modelService.export(config);
         } catch (Exception e) {
             LOG.error("Unexpected error", e);
         }
+
     }
 
 }
