@@ -47,7 +47,7 @@ public class ReaderFactory {
             }else if (format.equalsIgnoreCase("csv")){
                 String separator = StringUtils.substringAfter(formatExp,"_");
                 Map<String,Integer> map = new HashMap<>();
-                parsingMap.entrySet().forEach(entry -> map.put(entry.getKey(), Integer.valueOf(entry.getValue())));
+                parsingMap.entrySet().stream().filter(entry -> !entry.getKey().contains("labels")).forEach(entry -> map.put(entry.getKey(), Integer.valueOf(entry.getValue())));
                 String labelsSeparator = null;
                 if (parsingMap.containsKey("labels")) {
                     String labelsExp        = String.valueOf(parsingMap.get("labels"));
