@@ -23,28 +23,31 @@ public class ReaderFactory {
 
     public static Reader newFrom(String url, String formatExp, Map<String,String> parsingMap) throws IOException {
 
+
+        String format       = StringUtils.substringBefore(formatExp,"_");
+
         InputStreamReader inputReader;
 
         if (url.startsWith("http")){
-            if (url.endsWith("gz")) {
+            if (url.endsWith("gz") || format.contains("gz")) {
                 inputReader = new InputStreamReader(new GZIPInputStream(new URL(url).openStream()));
             }else{
                 inputReader = new InputStreamReader(new URL(url).openStream());
             }
         }else{
-            if (url.endsWith("gz")) {
+            if (url.endsWith("gz")|| format.contains("gz")) {
                 inputReader = new InputStreamReader(new GZIPInputStream(new FileInputStream(url)));
             }else{
                 inputReader = new InputStreamReader(new FileInputStream(url));
             }
         }
 
-        String format       = StringUtils.substringBefore(formatExp,"_");
+
 
         try {
-            if (format.equalsIgnoreCase("jsonl")){
+            if (format.toLowerCase().startsWith("jsonl")){
                 return new JsonlReader(inputReader,parsingMap);
-            }else if (format.equalsIgnoreCase("csv")){
+            }else if (format.toLowerCase().startsWith("csv")){
                 String separator = StringUtils.substringAfter(formatExp,"_");
                 Map<String,Integer> map = new HashMap<>();
                 parsingMap.entrySet().stream().filter(entry -> !entry.getKey().contains("labels")).forEach(entry -> map.put(entry.getKey(), Integer.valueOf(entry.getValue())));
