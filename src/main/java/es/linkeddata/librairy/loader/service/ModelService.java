@@ -74,6 +74,54 @@ public class ModelService {
 
     }
 
+
+    public void inference(Config config, Boolean fg) throws IOException {
+
+        ParallelService parallelService = new ParallelService();
+        LearnerClient librairyClient = new LearnerClient(config.get("librairy.endpoint"),config.get("librairy.user"),config.get("librairy.pwd"));
+
+
+        Map<String,String> readerParams = new HashMap<>();
+        Map<String, String> modelParams = new HashMap<>();
+        for (String key: config.list()){
+            if (key.startsWith("model")){
+                String param = StringUtils.substringAfter(key,"model.");
+                String value = config.get(key);
+                modelParams.put(param,value);
+            }
+            else if (key.startsWith("document")){
+                String param = StringUtils.substringAfter(key,"document.");
+                String value = config.get(key);
+                readerParams.put(param,value);
+            }
+        }
+
+        String corpusFormat = config.get("corpus.format");
+        Reader reader = ReaderFactory.newFrom(config.get("corpus.file"), corpusFormat,readerParams);
+
+        Optional<Document> doc;
+        AtomicInteger counter = new AtomicInteger();
+        Integer interval    = config.exists("corpus.interval")? Integer.valueOf(config.get("corpus.interval")): 100;
+        Integer maxSize     = config.exists("corpus.size")? Integer.valueOf(config.get("corpus.size")) : -1;
+        Integer offset      = config.exists("corpus.offset")? Integer.valueOf(config.get("corpus.offset")) : 0;
+        Boolean multigrams  = config.exists("corpus.multigrams")? Boolean.valueOf(config.get("corpus.multigrams")) : false;
+        reader.offset(offset);
+        while(( maxSize<0 || counter.get()<=maxSize) &&  (doc = reader.next()).isPresent()){
+            if (counter.incrementAndGet() % interval == 0) LOG.info(counter.get() + " documents indexed");
+            final Document document = doc.get();
+            parallelService.execute(() -> librairyClient.save(document, multigrams));
+        }
+        parallelService.stop();
+        LOG.info(counter.get() + " documents indexed");
+        LOG.info("done!");
+
+        librairyClient.train(modelParams);
+        LOG.info("model creation started");
+
+        if (fg) waitForFinish(librairyClient);
+
+    }
+
     public void retrain(Config config, Boolean fg){
 
         LearnerClient librairyClient = new LearnerClient(config.get("librairy.endpoint"),config.get("librairy.user"),config.get("librairy.pwd"));

@@ -119,7 +119,9 @@ public class LearnerClient extends LibrairyClient {
                 request.put(in, innerParams.get(in));
             }
 
+            Unirest.setTimeouts(10000,300000); // wait for 5min
             HttpResponse<String> response = Unirest.post(endpoint + "/exports").basicAuth(user, pwd).body(request).asString();
+            Unirest.setTimeouts(10000,60000); // restore default values
 
             if (response.getStatus() != 200 && response.getStatus() != 201 && response.getStatus() != 202){
                 return false;
