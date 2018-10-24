@@ -86,8 +86,6 @@ public class  JsonlReader implements Reader{
                 document.setLabels(labels);
             }
 
-            if (Strings.isNullOrEmpty(document.getText())) return Optional.empty();
-
             return Optional.of(document);
 
         }catch (Exception e){

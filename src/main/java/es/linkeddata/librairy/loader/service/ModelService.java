@@ -1,5 +1,6 @@
 package es.linkeddata.librairy.loader.service;
 
+import com.google.common.base.Strings;
 import es.linkeddata.librairy.loader.Config;
 import es.linkeddata.librairy.loader.client.LearnerClient;
 import es.linkeddata.librairy.loader.reader.Reader;
@@ -59,8 +60,9 @@ public class ModelService {
         Boolean multigrams  = config.exists("corpus.multigrams")? Boolean.valueOf(config.get("corpus.multigrams")) : false;
         reader.offset(offset);
         while(( maxSize<0 || counter.get()<=maxSize) &&  (doc = reader.next()).isPresent()){
-            if (counter.incrementAndGet() % interval == 0) LOG.info(counter.get() + " documents indexed");
             final Document document = doc.get();
+            if (Strings.isNullOrEmpty(document.getText())) continue;
+            if (counter.incrementAndGet() % interval == 0) LOG.info(counter.get() + " documents indexed");
             parallelService.execute(() -> librairyClient.save(document, multigrams));
         }
         parallelService.stop();

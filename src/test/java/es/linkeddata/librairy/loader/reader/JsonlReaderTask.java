@@ -1,5 +1,6 @@
 package es.linkeddata.librairy.loader.reader;
 
+import com.google.common.base.Strings;
 import org.junit.Test;
 import org.librairy.service.learner.facade.rest.model.Document;
 import org.slf4j.Logger;
@@ -36,7 +37,9 @@ public class JsonlReaderTask {
         Optional<Document> doc = Optional.empty();
         AtomicInteger counter = new AtomicInteger(0);
         while( (doc = reader.next()).isPresent()){
-            LOG.info(counter.incrementAndGet() + " lines read");
+            if (counter.incrementAndGet() % 100 == 0) LOG.info(counter.get() + " lines read");
+            if (Strings.isNullOrEmpty(doc.get().getText())) continue;
+            LOG.info("Paper with abstract!");
         }
 
         LOG.info("Document completed");
