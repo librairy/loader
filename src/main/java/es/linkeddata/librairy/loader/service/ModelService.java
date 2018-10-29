@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -26,7 +27,6 @@ public class ModelService {
 
     public void train(Config config, Boolean fg) throws IOException {
 
-        ParallelService parallelService = new ParallelService();
         LearnerClient librairyClient = new LearnerClient(config.get("librairy.endpoint"),config.get("librairy.user"),config.get("librairy.pwd"));
 
         if (!librairyClient.reset()){
@@ -59,13 +59,14 @@ public class ModelService {
         Integer offset      = config.exists("corpus.offset")? Integer.valueOf(config.get("corpus.offset")) : 0;
         Boolean multigrams  = config.exists("corpus.multigrams")? Boolean.valueOf(config.get("corpus.multigrams")) : false;
         reader.offset(offset);
+        ParallelExecutor executor = new ParallelExecutor();
         while(( maxSize<0 || counter.get()<=maxSize) &&  (doc = reader.next()).isPresent()){
             final Document document = doc.get();
             if (Strings.isNullOrEmpty(document.getText())) continue;
             if (counter.incrementAndGet() % interval == 0) LOG.info(counter.get() + " documents indexed");
-            parallelService.execute(() -> librairyClient.save(document, multigrams));
+            executor.submit(() -> librairyClient.save(document, multigrams));
         }
-        parallelService.stop();
+        executor.awaitTermination(1, TimeUnit.HOURS);
         LOG.info(counter.get() + " documents indexed");
         LOG.info("done!");
 

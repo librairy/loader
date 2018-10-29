@@ -45,9 +45,9 @@ public class CSVReader implements Reader{
 
     @Override
     public Optional<Document> next() {
-        String line;
-        try{
-            if ((line = reader.readLine()) == null){
+        String line = null;
+        try {
+            if ((line = reader.readLine()) == null) {
                 reader.close();
                 return Optional.empty();
             }
@@ -56,16 +56,19 @@ public class CSVReader implements Reader{
 
             Document document = new Document();
 
-            if (map.containsKey("id"))      document.setId(values[map.get("id")]);
-            if (map.containsKey("name"))    document.setName(values[map.get("name")]);
-            if (map.containsKey("text"))    document.setText(values[map.get("text")]);
-            if (map.containsKey("labels"))  document.setLabels(Arrays.asList(values[map.get("labels")].split(labelSeparator)));
+            if (map.containsKey("id")) document.setId(values[map.get("id")]);
+            if (map.containsKey("name")) document.setName(values[map.get("name")]);
+            if (map.containsKey("text")) document.setText(values[map.get("text")]);
+            if (map.containsKey("labels"))
+                document.setLabels(Arrays.asList(values[map.get("labels")].split(labelSeparator)));
 
             return Optional.of(document);
-
+        } catch (ArrayIndexOutOfBoundsException e){
+            LOG.warn("Invalid row("+e.getMessage()+") - [" + line + "]");
+            return Optional.of(new Document());
         }catch (Exception e){
             LOG.error("Unexpected error parsing file: " + path,e);
-            return Optional.empty();
+            return Optional.of(new Document());
         }
     }
 
