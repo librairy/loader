@@ -1,4 +1,4 @@
-package es.linkeddata.librairy.loader.reader;
+package es.linkeddata.librairy.loader.io;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -6,10 +6,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URL;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -21,7 +19,7 @@ public class ReaderFactory {
     private static final Logger LOG = LoggerFactory.getLogger(ReaderFactory.class);
 
 
-    public static Reader newFrom(String url, String formatExp, Map<String,String> parsingMap) throws IOException {
+    public static es.linkeddata.librairy.loader.io.Reader newFrom(String url, String formatExp, Map<String,String> parsingMap) throws IOException {
 
 
         String format       = StringUtils.substringBefore(formatExp,"_");

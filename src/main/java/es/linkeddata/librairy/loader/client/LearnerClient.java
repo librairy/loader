@@ -76,7 +76,7 @@ public class LearnerClient extends LibrairyClient {
 //            );
             modelParameters.setParameters(parameters);
 
-            HttpResponse<String> response = Unirest.post(endpoint + "/dimensions").basicAuth(user, pwd).body(modelParameters).asString();
+            HttpResponse<String> response = Unirest.post(endpoint + "/topics").basicAuth(user, pwd).body(modelParameters).asString();
 
             if (response.getStatus() != 200 && response.getStatus() != 201 && response.getStatus() != 202){
                 return false;
@@ -138,14 +138,14 @@ public class LearnerClient extends LibrairyClient {
     public boolean isCompleted(){
         try {
 
-            HttpResponse<JsonNode> response = Unirest.get(endpoint + "/dimensions").basicAuth(user, pwd).asJson();
+            HttpResponse<JsonNode> response = Unirest.get(endpoint + "/topics").basicAuth(user, pwd).asJson();
 
             if (response.getStatus() != 200 && response.getStatus() != 201 && response.getStatus() != 202){
                 LOG.warn("Error on response: " + response.getStatus() + ":" + response.getStatusText());
                 return true;
             }
 
-            JSONArray dimensions = response.getBody().getObject().getJSONArray("dimensions");
+            JSONArray dimensions = response.getBody().getArray();
 
             return dimensions.length() > 0;
 

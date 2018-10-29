@@ -1,4 +1,4 @@
-package es.linkeddata.librairy.loader.reader;
+package es.linkeddata.librairy.loader.io;
 
 import org.librairy.service.learner.facade.rest.model.Document;
 import org.slf4j.Logger;
@@ -27,7 +27,9 @@ public class CSVReader implements Reader{
 
     public CSVReader(File csvFile, String separator, String labelSeparator, Map<String,Integer> map) throws IOException {
         this.path = csvFile.getAbsolutePath();
-        this.reader = path.endsWith(".gz")? new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(csvFile)))) : new BufferedReader(new InputStreamReader(new FileInputStream(csvFile))) ;
+        this.reader = path.endsWith(".gz")?
+                new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(csvFile)))) :
+                new BufferedReader(new InputStreamReader(new FileInputStream(csvFile))) ;
         this.separator = separator;
         this.labelSeparator = labelSeparator;
         this.map = map;

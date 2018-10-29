@@ -1,4 +1,4 @@
-package es.linkeddata.librairy.loader.reader;
+package es.linkeddata.librairy.loader.io;
 
 import org.librairy.service.learner.facade.rest.model.Document;
 

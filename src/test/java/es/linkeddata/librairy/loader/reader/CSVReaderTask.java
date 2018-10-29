@@ -18,22 +18,23 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Badenes Olmedo, Carlos <cbadenes@fi.upm.es>
  */
 
-public class JsonlReaderTask {
+public class CSVReaderTask {
 
-    private static final Logger LOG = LoggerFactory.getLogger(JsonlReaderTask.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CSVReaderTask.class);
 
 
     @Test
     public void remote() throws IOException {
 
-        String endpoint = "https://delicias.dia.fi.upm.es/nextcloud/index.php/s/tCtq8K8wtm3aTjq/download";
+        String endpoint = "https://delicias.dia.fi.upm.es/nextcloud/index.php/s/fZib348ETqd2Xpa/download";
 
         Map<String, String> params = new HashMap<>();
-        params.put("id","id");
-        params.put("name","title");
-        params.put("text","text");
+        params.put("id","0");
+        params.put("name","0");
+        params.put("text","2");
+        params.put("labels","1");
 
-        Reader reader = ReaderFactory.newFrom(endpoint, "jsonl.gz", params);
+        Reader reader = ReaderFactory.newFrom(endpoint, "csv.gz_\t", params);
 
 
         Optional<Document> doc = Optional.empty();
@@ -41,7 +42,7 @@ public class JsonlReaderTask {
         while( (doc = reader.next()).isPresent()){
             if (counter.incrementAndGet() % 100 == 0) LOG.info(counter.get() + " lines read");
             if (Strings.isNullOrEmpty(doc.get().getText())) continue;
-            LOG.info("Paper with abstract!");
+            LOG.info("Paper with abstract! -> " + doc.get());
         }
 
         LOG.info("Document completed");
