@@ -88,7 +88,7 @@ public class  JsonlReader implements Reader{
 
         }catch (Exception e){
             LOG.error("Unexpected error parsing file: " + path,e);
-            return Optional.empty();
+            return Optional.of(new Document());
         }
     }
 
