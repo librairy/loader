@@ -1,4 +1,4 @@
-./upload.sh docker/corpus/doctopics.csv.gz $1/doctopics.csv.gz $2
+./upload.sh docker/model/doctopics.csv.gz $1/doctopics.csv.gz $2
 ./upload.sh docker/model/model-inferencer.bin $1/model-inferencer.bin $2
 ./upload.sh docker/model/model-parameters.bin $1/model-parameters.bin $2
 ./upload.sh docker/model/model-settings.bin $1/model-settings.bin $2
