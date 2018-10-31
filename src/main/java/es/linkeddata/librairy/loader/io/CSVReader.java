@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -56,11 +57,11 @@ public class CSVReader implements Reader{
 
             Document document = new Document();
 
-            if (map.containsKey("id")) document.setId(values[map.get("id")]);
-            if (map.containsKey("name")) document.setName(values[map.get("name")]);
-            if (map.containsKey("text")) document.setText(values[map.get("text")]);
+            if (map.containsKey("id")) document.setId(values[map.get("id")].replaceAll("\\P{Print}", ""));
+            if (map.containsKey("name")) document.setName(values[map.get("name")].replaceAll("\\P{Print}", ""));
+            if (map.containsKey("text")) document.setText(values[map.get("text")].replaceAll("\\P{Print}", ""));
             if (map.containsKey("labels"))
-                document.setLabels(Arrays.asList(values[map.get("labels")].split(labelSeparator)));
+                document.setLabels(Arrays.asList(values[map.get("labels")].split(labelSeparator)).stream().map(l -> l.replaceAll("\\P{Print}", "")).collect(Collectors.toList()));
 
             return Optional.of(document);
         } catch (ArrayIndexOutOfBoundsException e){

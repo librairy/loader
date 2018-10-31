@@ -51,17 +51,17 @@ public class  JsonlReader implements Reader{
 
             JSONObject jsonObject = new JSONObject(line);
 
-            if (map.containsKey("id"))      document.setId(jsonObject.getString(map.get("id")));
+            if (map.containsKey("id"))      document.setId(jsonObject.getString(map.get("id")).replaceAll("\\P{Print}", ""));
             if (map.containsKey("name") && jsonObject.has(map.get("name"))){
                 try{
-                    document.setName(jsonObject.getString(map.get("name")));
+                    document.setName(jsonObject.getString(map.get("name")).replaceAll("\\P{Print}", ""));
                 }catch (JSONException e){
                     LOG.warn(""+e.getMessage());
                 }
             }
             if (map.containsKey("text") && jsonObject.has(map.get("text")))    {
                 try{
-                    document.setText(jsonObject.getString(map.get("text")));
+                    document.setText(jsonObject.getString(map.get("text")).replaceAll("\\P{Print}", ""));
                 }catch (JSONException e){
                     LOG.warn(""+e.getMessage());
                 }
@@ -75,7 +75,7 @@ public class  JsonlReader implements Reader{
                     Iterator<Object> it = jsonObject.getJSONArray(map.get("labels")).iterator();
                     while(it.hasNext()){
                         String label = (String) it.next();
-                        labels.add(label);
+                        labels.add(label.replaceAll("\\P{Print}", ""));
                     }
                 }else{
                     labels.add(jsonObject.getString(map.get("labels")));
