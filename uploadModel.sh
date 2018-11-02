@@ -5,4 +5,6 @@
 ./upload.sh docker/model/model-topic-words.csv.gz $1/model-topic-words.csv.gz $2
 ./upload.sh docker/model/model-topics.csv.gz $1/model-topics.csv.gz $2
 ./upload.sh docker/model/model-topic-neighbours.csv.gz $1/model-topic-neighbours.csv.gz $2
+./upload.sh docker/model/model-alphabet.bin $1/model-alphabet.bin $2
+./upload.sh docker/model/model-pipe.bin $1/model-pipe.bin $2
 ./upload.sh application.properties $1/application.properties $2
