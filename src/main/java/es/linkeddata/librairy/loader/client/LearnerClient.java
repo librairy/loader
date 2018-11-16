@@ -69,11 +69,6 @@ public class LearnerClient extends LibrairyClient {
         try {
 
             ModelParameters modelParameters = new ModelParameters();
-//            Map<String, String> parameters = ImmutableMap.of(
-//                    "algorithm","llda",
-//                    "language","en",
-//                    "email","cbadenes@fi.upm.es"
-//            );
             modelParameters.setParameters(parameters);
 
             HttpResponse<String> response = Unirest.post(endpoint + "/topics").basicAuth(user, pwd).body(modelParameters).asString();
