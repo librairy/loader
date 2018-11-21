@@ -11,7 +11,7 @@ directory=Datasets/Research/CORDIS
 #./createFolder.sh $directory $pwd
 for TOPICS in 70 150
 do
-    echo "Training for $TOPICS .."
+    echo "Ready to create a topic model with $TOPICS topics .."
     cp application-template.properties application.properties
     sed -i "s/#topics#/$TOPICS/g" application.properties
     sed -i "s/#size#/-1/g" application.properties
