@@ -66,6 +66,7 @@ do
     sed -i "s/#title#/Wikipedia (EN) Topic Model/g" application.properties
     if [ "$NLP" = true ] ; then
         ./train-export-model.sh
+        ./upload.sh docker/data/corpus/bows.csv.gz $directory/bows.csv.gz $NEXTCLOUD_CREDENTIALS
     else
         ./retrain-export-model.sh
     fi
