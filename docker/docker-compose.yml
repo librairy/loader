@@ -2,7 +2,7 @@ version: '2'
 services:
   dbpedia-spotlight:
    image: dbpedia/spotlight-english:latest
-   command: java -Dfile.encoding=UTF-8 -Xmx10G -Dthreads.max=4 -Dthreads.core=4 -jar /opt/spotlight/dbpedia-spotlight-nightly-build.jar /opt/spotlight/en  http://0.0.0.0:80/rest
+   command: java -Dfile.encoding=UTF-8 -Xmx15G -Dthreads.max=5 -Dthreads.core=5 -jar /opt/spotlight/dbpedia-spotlight-nightly-build.jar /opt/spotlight/en  http://0.0.0.0:80/rest
   nlp-en-service:
     image: registry.bdlab.minetur.es/nlp-en-service:latest
   learner-topics:
@@ -11,7 +11,7 @@ services:
      - "7777:7777"
     environment:
       - LIBRAIRY_API_USERS=oeg:oeg2018
-      - JAVA_OPTS=-Xmx4192m
+      - JAVA_OPTS=-Xmx53248m
       - REST_PATH=/topics
     volumes:
      - ./:/librairy
