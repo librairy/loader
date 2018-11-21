@@ -20,21 +20,21 @@ CORPUS_FILE_URL=https://delicias.dia.fi.upm.es/nextcloud/index.php/s/SggPgAJwqrS
 BOW_FILE_URL=https://delicias.dia.fi.upm.es/nextcloud/index.php/s/oxMStbmYrXpkFmS/download
 ############################################################################################################
 
-
 corpus_file=corpora/$CORPUS_NAME/docs.jsonl.gz
+corpus_file_esc="${corpus_file////\/}"
 bow_file=docker/data/corpus/bows.csv.gz
 if [ "$NLP" = true ] ; then
    if [ -f "$corpus_file" ] ; then
         echo "using an existing corpus-file at $corpus_file"
    else
         mkdir -p corpora/$CORPUS_NAME
-        curl -o corpora/$CORPUS_NAME/docs.jsonl.gz "$CORPUS_FILE_URL"
+        curl -o $corpus_file "$CORPUS_FILE_URL"
    fi
 else
    if [ ! -f "$bow_file" ] ; then
-        mkdir -p docker/corpus
+        mkdir -p docker/data/corpus
    fi
-   curl -o docker/corpus/bows.csv.gz "$BOW_FILE_URL"
+   curl -o $bow_file "$BOW_FILE_URL"
 fi
 
 
@@ -46,7 +46,7 @@ directory=Datasets/Sesiad/$CORPUS_NAME
 ./createFolder.sh $directory $NEXTCLOUD_CREDENTIALS
 
 
-echo "Ready to create topic models from a BoW corpus .."
+echo "Ready to create topic models from corpus .."
 for TOPICS in 120 350
 do
     echo "Setting parameters for a Topic Model with $TOPICS topics.."
@@ -60,13 +60,14 @@ do
     sed -i "s/#dockerHub#/true/g" application.properties
     sed -i "s/#dockerUser#/$DOCKER_USER/g" application.properties
     sed -i "s/#dockerPassword#/$DOCKER_PWD/g" application.properties
-    sed -i "s/#file#/$corpus_file/g" application.properties
+    sed -i "s/#file#/$corpus_file_esc/g" application.properties
     sed -i "s/#image#/sesiad\/$CORPUS_NAME-model:$TOPICS-latest/g" application.properties
     sed -i "s/#description#/Topic Model created from Wikipedia (EN) Dump 20180420/g" application.properties
     sed -i "s/#title#/Wikipedia (EN) Topic Model/g" application.properties
     if [ "$NLP" = true ] ; then
         ./train-export-model.sh
         ./upload.sh docker/data/corpus/bows.csv.gz $directory/bows.csv.gz $NEXTCLOUD_CREDENTIALS
+        NLP=false
     else
         ./retrain-export-model.sh
     fi
@@ -76,7 +77,7 @@ do
     echo "data uploaded successfully"
 
     echo "uploading model as docker image to private repository"
-    docker tag sesiad/$CORPUS_NAME-model:$TOPICS-latest registry.bdlab.minetur.es:$CORPUS_NAME-model:$TOPICS-latest
+    docker tag sesiad/$CORPUS_NAME-model/$TOPICS-latest registry.bdlab.minetur.es:$CORPUS_NAME-model:$TOPICS-latest
     docker push registry.bdlab.minetur.es/$CORPUS_NAME-model:$TOPICS-latest
     echo "image uploaded succesfully"
 done
