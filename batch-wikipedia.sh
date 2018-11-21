@@ -15,8 +15,8 @@ NLP=false
 ############################################################################################################
 # Corpus path
 ############################################################################################################
-CORPUS_NAME=cordis
-CORPUS_FILE_URL=https://delicias.dia.fi.upm.es/nextcloud/index.php/s/woBzdYWfJtJ6sfY/download
+CORPUS_NAME=wikipedia
+CORPUS_FILE_URL=https://delicias.dia.fi.upm.es/nextcloud/index.php/s/SggPgAJwqrSGZsN/download
 BOW_FILE_URL=https://delicias.dia.fi.upm.es/nextcloud/index.php/s/XmxEt2SXd44fqAB/download
 ############################################################################################################
 
