@@ -11,6 +11,7 @@ do
     sed -i "s/#name#/title/g" application.properties
     sed -i "s/#text#/objective/g" application.properties
     sed -i "s/#format#/jsonl_gz/g" application.properties
+    sed -i "s/#dockerHub#/false/g" application.properties
     sed -i "s/#file#/\/home\/cbadenes\/corpus\/cordis\/cordis.jsonl.gz/g" application.properties
     sed -i "s/#image#/registry.bdlab.minetur.es\/cordis-model:1.2-$TOPICS/g" application.properties
     sed -i "s/#description#/Topic Model created from Community Research and Development Information Service projects between 1984-2018/g" application.properties
