@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-./batch-cordis.sh
-./batch-wikipedia.sh
-./batch-patents.sh
+./batch-cordis.sh $1 $2
+./batch-wikipedia.sh $1 $2
+./batch-patents.sh $1 $2
