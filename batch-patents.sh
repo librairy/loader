@@ -15,13 +15,13 @@ NLP=false
 ############################################################################################################
 # Corpus path
 ############################################################################################################
-CORPUS_NAME=wikipedia
-CORPUS_FILE_URL=https://delicias.dia.fi.upm.es/nextcloud/index.php/s/SggPgAJwqrSGZsN/download
-BOW_FILE_URL=https://delicias.dia.fi.upm.es/nextcloud/index.php/s/oxMStbmYrXpkFmS/download
+CORPUS_NAME=patents
+CORPUS_FILE_URL=https://delicias.dia.fi.upm.es/nextcloud/index.php/s/SEdjnweQG3boBYK/download
+BOW_FILE_URL=https://delicias.dia.fi.upm.es/nextcloud/index.php/s/bAZYLiQ7Pa2YXqQ/download
 ############################################################################################################
 
 
-corpus_file=corpora/$CORPUS_NAME/docs.jsonl.gz
+corpus_file=corpora/$CORPUS_NAME/docs.csv.gz
 bow_file=docker/corpus/bows.csv.gz
 if [ "$NLP" = true ] ; then
    if [ -f "$corpus_file" ] ; then
@@ -47,23 +47,23 @@ directory=Datasets/Sesiad/$CORPUS_NAME
 
 
 echo "Ready to create topic models from a BoW corpus .."
-for TOPICS in 120 350
+for TOPICS in 250 750
 do
     echo "Setting parameters for a Topic Model with $TOPICS topics.."
     cp application-template.properties application.properties
     sed -i "s/#topics#/$TOPICS/g" application.properties
     sed -i "s/#size#/-1/g" application.properties
-    sed -i "s/#id#/id/g" application.properties
-    sed -i "s/#name#/title/g" application.properties
-    sed -i "s/#text#/text/g" application.properties
-    sed -i "s/#format#/jsonl_gz/g" application.properties
+    sed -i "s/#id#/0/g" application.properties
+    sed -i "s/#name#/0/g" application.properties
+    sed -i "s/#text#/2/g" application.properties
+    sed -i "s/#format#/csv_gz/g" application.properties
     sed -i "s/#dockerHub#/true/g" application.properties
     sed -i "s/#dockerUser#/$DOCKER_USER/g" application.properties
     sed -i "s/#dockerPassword#/$DOCKER_PWD/g" application.properties
     sed -i "s/#file#/$corpus_file/g" application.properties
     sed -i "s/#image#/sesiad\/$CORPUS_NAME-model:$TOPICS-latest/g" application.properties
-    sed -i "s/#description#/Topic Model created from Wikipedia (EN) Dump 20180420/g" application.properties
-    sed -i "s/#title#/Wikipedia (EN) Topic Model/g" application.properties
+    sed -i "s/#description#/Topic Model created from Patents (EN) Corpus/g" application.properties
+    sed -i "s/#title#/Patents (EN) Topic Model/g" application.properties
     if [ "$NLP" = true ] ; then
         ./train-export-model.sh
     else
