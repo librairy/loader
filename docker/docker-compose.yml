@@ -1,10 +1,10 @@
 version: '2'
 services:
-#  dbpedia-spotlight:
-#   image: dbpedia/spotlight-english:latest
-#   command: java -Dfile.encoding=UTF-8 -Xmx15G -Dthreads.max=5 -Dthreads.core=5 -jar /opt/spotlight/dbpedia-spotlight-nightly-build.jar /opt/spotlight/en  http://0.0.0.0:80/rest
-#  nlp-en-service:
-#    image: registry.bdlab.minetur.es/nlp-en-service:latest
+  dbpedia-spotlight:
+   image: dbpedia/spotlight-english:latest
+   command: java -Dfile.encoding=UTF-8 -Xmx15G -Dthreads.max=5 -Dthreads.core=5 -jar /opt/spotlight/dbpedia-spotlight-nightly-build.jar /opt/spotlight/en  http://0.0.0.0:80/rest
+  nlp-en-service:
+    image: registry.bdlab.minetur.es/nlp-en-service:latest
   learner-topics:
     image: registry.bdlab.minetur.es/learner-topics-service:latest
     ports:
