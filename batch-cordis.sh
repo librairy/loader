@@ -8,7 +8,7 @@ fi
 
 pwd=$1
 directory=Datasets/Research/CORDIS
-./createFolder.sh $directory $pwd
+#./createFolder.sh $directory $pwd
 for TOPICS in 70 150
 do
     echo "Training for $TOPICS .."
