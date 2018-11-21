@@ -1,3 +1,11 @@
+#!/usr/bin/env bash
+
+if [ $# -eq 0 ]
+  then
+    echo -e "\nPlease add NextCloud credentials when call: '$0 user:pwd' to run this command!\n"
+    exit 1
+fi
+
 pwd=$1
 directory=Datasets/Research/CORDIS
 ./createFolder.sh $directory $pwd

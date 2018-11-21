@@ -1,3 +1,5 @@
 docker pull registry.bdlab.minetur.es/nlp-en-service:latest
 docker pull registry.bdlab.minetur.es/modeler-topics-service:latest
 docker pull registry.bdlab.minetur.es/learner-topics-service:latest
+docker image prune -f
+docker volume prune -f
