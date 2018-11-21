@@ -22,7 +22,7 @@ BOW_FILE_URL=https://delicias.dia.fi.upm.es/nextcloud/index.php/s/bAZYLiQ7Pa2YXq
 
 
 corpus_file=corpora/$CORPUS_NAME/docs.csv.gz
-bow_file=docker/corpus/bows.csv.gz
+bow_file=docker/data/corpus/bows.csv.gz
 if [ "$NLP" = true ] ; then
    if [ -f "$corpus_file" ] ; then
         echo "using an existing corpus-file at $corpus_file"
