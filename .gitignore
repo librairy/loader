@@ -22,5 +22,5 @@ target/
 .idea
 *.iml
 # deployed package files #
-
+corpora/
 *.DEPLOYED
