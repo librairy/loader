@@ -47,7 +47,7 @@ directory=Datasets/Sesiad/$CORPUS_NAME
 ./createFolder.sh $directory $NEXTCLOUD_CREDENTIALS
 
 
-echo "Ready to create topic models from corpus .."
+echo "Ready to create a new model from $CORPUS_NAME corpus .."
 for TOPICS in 70 150
 do
     echo "Setting parameters for a Topic Model with $TOPICS topics.."
@@ -62,7 +62,7 @@ do
     sed -i "s/#dockerUser#/$DOCKER_USER/g" application.properties
     sed -i "s/#dockerPassword#/$DOCKER_PWD/g" application.properties
     sed -i "s/#file#/$corpus_file_esc/g" application.properties
-    sed -i "s/#image#/sesiad\/$CORPUS_NAME-model:$TOPICS-latest/g" application.properties
+    sed -i "s/#image#/sesiad\/$CORPUS_NAME-$TOPICS-model:latest/g" application.properties
     sed -i "s/#description#/Topic Model created from Community Research and Development Information Service projects between 1984-2018/g" application.properties
     sed -i "s/#title#/CORDIS Topic Model - Infrastructure as Category/g" application.properties
     if [ "$NLP" = true ] ; then
@@ -78,7 +78,7 @@ do
     echo "data uploaded successfully"
 
     echo "uploading model as docker image to private repository"
-    docker tag sesiad/$CORPUS_NAME-model/$TOPICS-latest registry.bdlab.minetur.es:$CORPUS_NAME-model:$TOPICS-latest
-    docker push registry.bdlab.minetur.es/$CORPUS_NAME-model:$TOPICS-latest
+    docker tag sesiad/$CORPUS_NAME-$TOPICS-model/latest registry.bdlab.minetur.es/$CORPUS_NAME-$TOPICS-model:latest
+    docker push registry.bdlab.minetur.es/$CORPUS_NAME-$TOPICS-model:latest
     echo "image uploaded succesfully"
 done
