@@ -1,11 +1,8 @@
 docker image prune -f
 docker volume prune -f
 docker pull librairy/nlp-en-service:latest
-#docker pull registry.bdlab.minetur.es/nlp-en-service:latest
 docker pull librairy/modeler-topics-service:latest
-#docker pull registry.bdlab.minetur.es/modeler-topics-service:latest
 docker pull librairy/learner-topics-service:latest
-#docker pull registry.bdlab.minetur.es/learner-topics-service:latest
 mkdir -p -m 777 data
 chmod -R 777 data
 docker-compose up -d
